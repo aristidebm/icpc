@@ -39,8 +39,11 @@ def lcd_function():
     """
     anwser = "y"
 
+    # help function
+    print_help()
+
     while True:
-        height, width, numbers = input("Enter data : ").split(" ")
+        height, width, numbers = input("data@lcd ~> : ").split(" ")
         height = int(height)
         width = int(width)
         mid = compute_mid(height)
@@ -80,8 +83,9 @@ def lcd_function():
                     
 
             print()
-
-        anwser = input("Hit q or Q if you want to quit : ")
+        
+        print()
+        anwser = input("quit@lcd(hit q to quit) ~> : ")
         if anwser.lower() == 'q':
             break
 
@@ -115,6 +119,20 @@ def print_hiphen_character(width):
     print("-"*(width - 2), end="")
     print(" ", end="\t")
 
+
+def print_help():
+    print(
+            """
+help
+
+data@lcd ~> : <height> <width> <number>
+params:
+    height - each character height
+    width  - each character width
+    mumber - number to turn to lcd
+Example:
+    python lcd.py 10 10 123456789
+            """)
 
 if __name__ == "__main__":
     main()
