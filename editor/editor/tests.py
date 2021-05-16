@@ -54,7 +54,7 @@ class EditorTestCase(unittest.TestCase):
         self.assertTrue(self.empty_image)
         self.editor.draw_pixel(pixel=(5, 5), color=3)
         self.assertFalse(self.empty_image)
-        self.assertEqual(self.editor.image[5][5], 3)
+        self.assertEqual(self.editor.image[4][4], 3)
 
     def test_horizontal_segment_draw_success(self):
         """
@@ -109,6 +109,20 @@ class EditorTestCase(unittest.TestCase):
 
         with self.assertRaises(ImageOverflowError):
             self.editor.create_drawing_board(size=(256, 256))
+
+    def test_show_image(self):
+        """
+        Make sure the image is well formatted.
+        """
+        image = self.editor.create_drawing_board(size=(5, 5))
+        self.editor.draw_pixel(pixel=(4,4), color=3)
+        self.editor.draw_pixel(pixel=(4,3), color=3)
+        self.editor.draw_pixel(pixel=(3,4), color=3)
+        self.editor.draw_pixel(pixel=(3,3), color=3)
+        self.editor.draw_pixel_region(pixel=(2,2), color=4)
+        import pdb; pdb.set_trace()
+        self.editor.show_image("simple")
+        # import pdb; pdb.set_trace()
 
 if __name__ == "__main__":
     unittest.main()
