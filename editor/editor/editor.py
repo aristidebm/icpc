@@ -40,6 +40,9 @@ class Editor(object):
         """
         Function to draw a segment (a segment is a line of pixel)
         """
+        if begin > end:
+            begin, end = end, begin
+
         is_segment_valid, _ = self.is_valid_segment(orientation, fixed_row, begin, end)
 
         if is_segment_valid:
@@ -55,8 +58,8 @@ class Editor(object):
         pass
 
     def _create_image(self, size):
-        if self.is_valid_size(size):
-            return [[0] * size[1] for _ in range(size[0])]
+        self.is_valid_size(size, with_trace=True)
+        return [[0] * size[1] for _ in range(size[0])]
 
     def _draw_segment(self, orientation, fixed_row, begin, end, color):
         """
@@ -117,7 +120,7 @@ class Editor(object):
                 raise InvalidAxisFormatError
             # try to get the pixel
             self.image[pixel[0] - 1][pixel[1] - 1]
-        except (IndexError, TypeError, InvalidPixelError) as exp:
+        except (IndexError, TypeError, InvalidAxisFormatError) as exp:
             is_valid_pixel = False
             if with_trace:
                 raise exp
@@ -134,11 +137,12 @@ class Editor(object):
         try:
             if not isinstance(size, tuple) or len(size) !=2:
                 is_valid_size = False
-                raise InvalidImageSizeError
+                raise InvalidAxisFormatError
             if sum(size) > 2*self.max_size:
+                # import pdb; pdb.set_trace()
                 is_valid_size = False
                 raise ImageOverflowError
-        except (InvalidImageSizeError, ImageOverflowError) as e:
+        except (InvalidAxisFormatError, ImageOverflowError) as e:
             if with_trace:
                 raise e
 

@@ -3,6 +3,7 @@ class ImageOverflowError(Exception):
     Throws when the the provided image size is greater than the limit (256x256).
     """
     def __init__(self, message=None):
+        self.max_size = 250
         self.message = message or f"The max image size is {self.max_size}x{self.max_size}"
         super().__init__(message)
 

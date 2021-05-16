@@ -1,5 +1,6 @@
 import unittest
 from editor.editor import Editor
+from editor.exceptions import InvalidAxisFormatError, ImageOverflowError
 
 class EditorTestCase(unittest.TestCase):
     """
@@ -68,6 +69,13 @@ class EditorTestCase(unittest.TestCase):
         self.assertEqual(sum(self.editor.image[0][:10]), 10*color)
         self.assertFalse(self.empty_image)
 
+        # make sure we can give sure we can swap begin and end if begin > end
+        self.editor.clear_drawing_board()
+        self.editor.draw_segment(orientation=self.editor.valid_orientations[0],
+        fixed_row=1, begin=10, end=1, color=color)
+        self.assertEqual(sum(self.editor.image[0][:10]), 10*color)
+        self.assertFalse(self.empty_image)
+
     def test_vertical_segment_draw_success(self):
         """
         Make sure we can draw a segment.
@@ -77,10 +85,30 @@ class EditorTestCase(unittest.TestCase):
         self.assertTrue(self.empty_image)
         self.editor.draw_segment(orientation=self.editor.valid_orientations[1],
         fixed_row=1, begin=1, end=10, color=color)
-        # import pdb;pdb.set_trace()
         self.assertEqual(sum(item[0] for item in self.editor.image[0:10]), 10*color)
         self.assertFalse(self.empty_image)
 
+        # make sure we can give sure we can swap begin and end if begin > end
+        self.editor.clear_drawing_board()
+        # import pdb;pdb.set_trace()
+        self.editor.draw_segment(orientation=self.editor.valid_orientations[1],
+        fixed_row=1, begin=10, end=1, color=color)
+        self.assertEqual(sum(item[0] for item in self.editor.image[0:10]), 10*color)
+        self.assertFalse(self.empty_image)
+
+    def test_create_drawing_board_failure(self):
+        """
+        Make sure invalid data are well checked.
+        """
+        self.assertIsNone(self.editor.image)
+        with self.assertRaises(InvalidAxisFormatError):
+            self.editor.create_drawing_board(size=(10,))
+
+        with self.assertRaises(InvalidAxisFormatError):
+            self.editor.create_drawing_board(size=[10, 10])
+
+        with self.assertRaises(ImageOverflowError):
+            self.editor.create_drawing_board(size=(256, 256))
 
 if __name__ == "__main__":
     unittest.main()

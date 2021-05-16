@@ -3,4 +3,4 @@
 
 
 test:
-	python -m unittest editor.tests.EditorTestCase
+	python -m unittest -v --locals editor.tests.EditorTestCase
